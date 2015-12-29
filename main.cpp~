@@ -1,37 +1,36 @@
-#include <string.h>
-#include <stdio.h>
+#include "config.h"
 #include "sqlserver.h"
 
 int main(int argc, char** argv)
 {
-        char szServer[32] = {0};
-	char szDBName[32] = {0};
-	char szUID[32] = {0};  
-        char szPassword[32] = {0}; 
-	cout<<"please enter server:port :"<<endl;
-	cin>>szServer;
-	cout<<"please enter dbname:"<<endl;
-	cin>>szDBName;
-	cout<<"please enter uid:"<<endl;
-	cin>>szUID;
-	cout<<"please enter password:"<<endl;
-	cin>>szPassword;
-	SqlClient *client=new SqlClient();
-	if(client->Open(szServer,szDBName,szUID,szPassword)==-1)
+	Config *config=new Config();
+	if(!config->ReadConfig())
 	{
+		delete config;
 		return -1;
 	}
 
-	char szSql[1024]={0};
+	SqlClient *client=new SqlClient();
+	cout<<"ip:"<<config->ip<<endl;
+	cout<<"dbName:"<<config->dbName<<endl;
+	cout<<"id:"<<config->uid<<endl;
+	cout<<"password:"<<config->password<<endl;
+	if(client->Open(config->ip,config->dbName,config->uid,config->password)==-1)
+	{
+		delete config;
+		return -1;
+	}
+	delete config;
+	string szSql;
 	cout<<"please enter executesql:"<<endl;
-	cin>>szSql;
-	client->ExecuteNonQuery(szSql);
+	getline(cin,szSql);
+	client->ExecuteNonQuery(szSql.c_str());
 
 	char szID[20]={0};  
 	char szName[80]={0};  
 	cout<<"please enter querysql:"<<endl;
-	scanf("%s",szSql);
-	int recode=client->ExecuteQuery(szSql);
+	getline(cin,szSql);
+	int recode=client->ExecuteQuery(szSql.c_str());
         if (recode == 1)
 	{  
 		dbbind(client->dbprocess, 1, CHARBIND, (DBINT)0, (BYTE*)szID);  

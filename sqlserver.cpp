@@ -13,6 +13,8 @@ SqlClient::~SqlClient()
 
 int SqlClient::Open(const char* server,const char* dbName,const char* uid,const char *password)
 {
+
+	cout<<"connecting sql server......"<<endl;
 	dbinit();	//初始化db-library  
 	LOGINREC *loginrec = dblogin();  
         DBSETLUSER(loginrec, uid);         
@@ -26,7 +28,7 @@ int SqlClient::Open(const char* server,const char* dbName,const char* uid,const 
 	cout<<"connect sql server success!"<<endl;
 	if(dbuse(dbprocess, dbName) == FAIL) 
 	{ 
-		cout<<"open database failed!"<<endl;
+		cout<<"connect database failed!"<<endl;
 		return -1;
 	}
 	cout<<"connect database success!"<<endl;

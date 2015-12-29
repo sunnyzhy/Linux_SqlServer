@@ -1,5 +1,8 @@
 #include <iostream>
 #include <sybdb.h>
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
 using namespace std;
 
 class SqlClient
